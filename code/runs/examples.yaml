@@ -1,0 +1,25 @@
+# Example runs file (public code export): one entry, the one the README's training command uses.
+# f-60m-s1 is model F of the report at 60M parameters, seed 1: the settings of the entry abl-f-mxl-a-s1 of runs/ablation-60m.yaml
+# (the entries of that file are the 60M ablation set). Paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/examples.yaml --list   |   --name f-60m-s1 --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: f-60m-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512

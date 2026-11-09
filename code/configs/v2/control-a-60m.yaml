@@ -1,0 +1,159 @@
+# Base config for scripts/train.py (public code export). Written from the project's file of the same name with the
+# comments left out; the parsed content is identical. A runs file entry (runs/*.yaml) overrides keys of it with `set`.
+model:
+  arch: control
+  vocab_size: 64000
+  tie_embeddings: false
+  d_model: 512
+  ffn_hidden: 1408
+  norm_eps: 1.0e-06
+  embed_norm: true
+  init_std: 0.02
+  encoder:
+    n_layers: 20
+    full_attn_interval: 4
+    attention:
+      n_q_heads: 4
+      n_kv_heads: 1
+      head_dim: 128
+      gate: elementwise
+      qk_norm: true
+      rope_fraction: 0.25
+      rope_theta: 10000000.0
+      backend: flex
+    gdn:
+      n_k_heads: 2
+      n_v_heads: 4
+      k_head_dim: 128
+      v_head_dim: 128
+      conv_kernel: 4
+      init: fla
+      kernel: ced
+      chunk_size: 64
+      output_gate: sigmoid
+      input_dtype: bfloat16
+    loops: 1
+  decoder:
+    n_layers: 9
+    attention:
+      n_q_heads: 4
+      n_kv_heads: 1
+      head_dim: 128
+      gate: elementwise
+      qk_norm: true
+      rope_fraction: 0.25
+      rope_theta: 10000000.0
+      backend: flex
+    memory_attn_interval: 1
+    gdn:
+      n_k_heads: 2
+      n_v_heads: 4
+      k_head_dim: 128
+      v_head_dim: 128
+      conv_kernel: 4
+      init: fla
+      kernel: fla
+      chunk_size: 64
+      output_gate: sigmoid
+      input_dtype: bfloat16
+    ffn_experts: 0
+    ffn_top_k: 2
+    ffn_expert_hidden: null
+    moe_balance_weight: 0.01
+    untie_mixers: none
+    router_z_weight: 0.0
+    memory_kv_per_layer: false
+    capacity_fraction: 0.25
+    capacity_multiple: 128
+  loop:
+    t_max: 2
+    t_choices:
+    - 2
+    t_probs:
+    - 1.0
+    t_eval: 2
+    injection: none
+    parcae_init_decay: 0.4472135954999579
+    loop_embedding: true
+    hyper_connections: static
+    draft_loss_weight: 0.0
+    depth_attention: none
+    depth_attention_head_dim: 128
+    depth_attention_rope_theta: 500.0
+    hc_streams: 2
+    hc_write: delta
+    hc_res_init: 0.05
+  residual_scale:
+    mode: inverse_loops
+    lam: 1.0
+    depth_base: 1.0
+    t_ref: 2
+    l_ref: 12.0
+  second_pass:
+    pass_embedding: true
+data:
+  kind: shards
+  shard_dir: /tmp/data/train
+  span_fraction: 0.25
+  seq_len: 8192
+  batch_size: 24
+  doc_len_min: 8
+  doc_len_max: 40
+  span_distribution: lognormal
+  span_median: 230.0
+  span_sigma: 1.16
+  span_min: 16
+  span_max: 4096
+  seed: 1234
+  chat_whole: true
+  fit_decoder_capacity: false
+  decoder_positions: random
+optim:
+  name: muon
+  lr: 0.003
+  betas:
+  - 0.9
+  - 0.95
+  eps: 1.0e-08
+  weight_decay: 0.165
+  grad_clip: 1.0
+  warmup_steps: 610
+  decay_fraction: 0.2
+  muon_momentum: 0.95
+  muon_nesterov: true
+  muon_ns_steps: 5
+  adamw_lr_scale: 1.0
+loss:
+  aux_weight: 1.0
+  z_loss: 0.0001
+  normalization: global_token_mean
+  aux_positions: context
+  aux_fraction: 0.5
+wandb:
+  mode: disabled
+  project: looped-ced
+  entity: null
+  run_name: null
+eval:
+  sets: {}
+  every_steps: 500
+  periodic_max_rows: 32
+  batch_size: 1
+steps: 6487
+seed: 1
+dtype: float32
+log_every: 10
+ckpt_every_steps: 100000
+ckpt_every_minutes: 8.0
+ckpt_keep: 2
+device: auto
+autocast: bfloat16
+micro_batch_size: 3
+tf32: true
+deterministic: true
+fill_uninitialized_memory: false
+metrics_jsonl: true
+compile: all
+head_select: true
+head_impl: fused
+trim_decoder_slots: 0

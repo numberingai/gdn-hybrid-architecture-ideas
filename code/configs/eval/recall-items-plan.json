@@ -1,0 +1,269 @@
+{
+ "version": 1,
+ "rule": "target 1/4: the sampling SE sqrt(v/n) is at most the seed SD / 4, the seed SD being the 60M ablation set's per-cell pooled within-arm SD (df 20) with its sampling variance taken out; n rounded up to 100, never below the items already scored",
+ "cells": [
+  {
+   "key": "multikey_n4|8192",
+   "probe": "multikey",
+   "n_keys": 4,
+   "length": 8192,
+   "source": "mk",
+   "n_old": 300,
+   "n": 700
+  },
+  {
+   "key": "multikey_n4|16384",
+   "probe": "multikey",
+   "n_keys": 4,
+   "length": 16384,
+   "source": "mk",
+   "n_old": 300,
+   "n": 700
+  },
+  {
+   "key": "multikey_n4|32768",
+   "probe": "multikey",
+   "n_keys": 4,
+   "length": 32768,
+   "source": "mk",
+   "n_old": 300,
+   "n": 500
+  },
+  {
+   "key": "multikey_n4|65536",
+   "probe": "multikey",
+   "n_keys": 4,
+   "length": 65536,
+   "source": "mk",
+   "n_old": 300,
+   "n": 500
+  },
+  {
+   "key": "multikey_n4|131072",
+   "probe": "multikey",
+   "n_keys": 4,
+   "length": 131072,
+   "source": "mk128",
+   "n_old": 100,
+   "n": 500
+  },
+  {
+   "key": "multikey_n16|8192",
+   "probe": "multikey",
+   "n_keys": 16,
+   "length": 8192,
+   "source": "mk",
+   "n_old": 300,
+   "n": 500
+  },
+  {
+   "key": "multikey_n16|16384",
+   "probe": "multikey",
+   "n_keys": 16,
+   "length": 16384,
+   "source": "mk",
+   "n_old": 300,
+   "n": 400
+  },
+  {
+   "key": "multikey_n16|32768",
+   "probe": "multikey",
+   "n_keys": 16,
+   "length": 32768,
+   "source": "mk",
+   "n_old": 300,
+   "n": 500
+  },
+  {
+   "key": "multikey_n16|65536",
+   "probe": "multikey",
+   "n_keys": 16,
+   "length": 65536,
+   "source": "mk",
+   "n_old": 300,
+   "n": 300
+  },
+  {
+   "key": "multikey_n16|131072",
+   "probe": "multikey",
+   "n_keys": 16,
+   "length": 131072,
+   "source": "mk128",
+   "n_old": 100,
+   "n": 400
+  },
+  {
+   "key": "pcr_niahk_n4|2048",
+   "probe": "pcr_niahk",
+   "n_keys": 4,
+   "length": 2048,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 500
+  },
+  {
+   "key": "pcr_niahk_n4|4096",
+   "probe": "pcr_niahk",
+   "n_keys": 4,
+   "length": 4096,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 600
+  },
+  {
+   "key": "pcr_niahk_n4|8192",
+   "probe": "pcr_niahk",
+   "n_keys": 4,
+   "length": 8192,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 600
+  },
+  {
+   "key": "pcr_niahk_n16|2048",
+   "probe": "pcr_niahk",
+   "n_keys": 16,
+   "length": 2048,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 400
+  },
+  {
+   "key": "pcr_niahk_n16|4096",
+   "probe": "pcr_niahk",
+   "n_keys": 16,
+   "length": 4096,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 500
+  },
+  {
+   "key": "pcr_niahk_n16|8192",
+   "probe": "pcr_niahk",
+   "n_keys": 16,
+   "length": 8192,
+   "source": "pcrk",
+   "n_old": 200,
+   "n": 400
+  }
+ ],
+ "groups": [
+  {
+   "name": "g1",
+   "modelled_s": 2940.0,
+   "deadline_s": 3600,
+   "items": 600,
+   "parts": [
+    {
+     "cell": "multikey_n4|131072",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "multikey_n16|131072",
+     "start": 0,
+     "stop": 100
+    }
+   ]
+  },
+  {
+   "name": "g2",
+   "modelled_s": 2976.5,
+   "deadline_s": 3600,
+   "items": 1600,
+   "parts": [
+    {
+     "cell": "multikey_n16|131072",
+     "start": 100,
+     "stop": 400
+    },
+    {
+     "cell": "multikey_n4|65536",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "multikey_n16|65536",
+     "start": 0,
+     "stop": 300
+    },
+    {
+     "cell": "multikey_n4|32768",
+     "start": 0,
+     "stop": 500
+    }
+   ]
+  },
+  {
+   "name": "g3",
+   "modelled_s": 1248.0,
+   "deadline_s": 1500,
+   "items": 5800,
+   "parts": [
+    {
+     "cell": "multikey_n16|32768",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "multikey_n4|16384",
+     "start": 0,
+     "stop": 700
+    },
+    {
+     "cell": "multikey_n16|16384",
+     "start": 0,
+     "stop": 400
+    },
+    {
+     "cell": "multikey_n4|8192",
+     "start": 0,
+     "stop": 700
+    },
+    {
+     "cell": "multikey_n16|8192",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "pcr_niahk_n4|8192",
+     "start": 0,
+     "stop": 600
+    },
+    {
+     "cell": "pcr_niahk_n16|8192",
+     "start": 0,
+     "stop": 400
+    },
+    {
+     "cell": "pcr_niahk_n4|4096",
+     "start": 0,
+     "stop": 600
+    },
+    {
+     "cell": "pcr_niahk_n16|4096",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "pcr_niahk_n4|2048",
+     "start": 0,
+     "stop": 500
+    },
+    {
+     "cell": "pcr_niahk_n16|2048",
+     "start": 0,
+     "stop": 400
+    }
+   ]
+  }
+ ],
+ "per_final": {
+  "modelled_s": 7164.6,
+  "groups": 3,
+  "slice_hours_modelled": 1.99,
+  "slice_hours_bound": 2.417
+ },
+ "target_k": 4,
+ "sd_scale": 1.0
+}

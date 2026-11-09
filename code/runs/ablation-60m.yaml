@@ -1,0 +1,461 @@
+# Runs file ablation-60m (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/ablation-60m.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: abl-f-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-base-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-r1e-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-f-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-base-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-r1e-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-f-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-base-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-r1e-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+  - name: abl-nor1e-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-no41-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-noqmix-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-nomix-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notst-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notie-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+  - name: abl-fgrad-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,6],[442,4],[884,3],[1326,2],[1772,1]]"
+      - tst.keep_optimizer_state=true
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-nor1e-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-no41-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-noqmix-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-nomix-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notst-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notie-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+  - name: abl-fgrad-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,6],[442,4],[884,3],[1326,2],[1772,1]]"
+      - tst.keep_optimizer_state=true
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-nor1e-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-no41-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-noqmix-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-nomix-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notst-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+  - name: abl-notie-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+  - name: abl-fgrad-mxl-a-s3
+    config: configs/v2/control-a-60m.yaml
+    seed: 3
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[4865,5838,6163,6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,6],[442,4],[884,3],[1326,2],[1772,1]]"
+      - tst.keep_optimizer_state=true
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512

@@ -1,0 +1,449 @@
+# Runs file scale-checks-60m (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/scale-checks-60m.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: scale-base-stable-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: stable
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: abl-base-mxl-a-s1
+    after_step: 4865
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=84163
+      - "checkpoint_steps=[10520,21040,42081,84163]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.0
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/abl-base-mxl-a-s1/checkpoints/step_00004865.pt"
+      - data.union_order=sets_in_order
+  - name: scale-r1e-stable-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: stable
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: abl-r1e-mxl-a-s1
+    after_step: 4865
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=84166
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[10520,21041,42083,84166]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.0
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/abl-r1e-mxl-a-s1/checkpoints/step_00004865.pt"
+      - data.union_order=sets_in_order
+  - name: scale-f-stable-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: stable
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: abl-f-mxl-a-s1
+    after_step: 4865
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=64929
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[8116,16232,32464,64929]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.decay_fraction=0.0
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/abl-f-mxl-a-s1/checkpoints/step_00004865.pt"
+      - data.union_order=sets_in_order
+  - name: lrsw-base-0p5x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: lr
+    lr_mult: 0.5
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - optim.lr=0.0015
+  - name: lrsw-base-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: lr
+    lr_mult: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - optim.lr=0.006
+  - name: lrsw-r1e-0p5x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: lr
+    lr_mult: 0.5
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - optim.lr=0.0015
+  - name: lrsw-r1e-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: lr
+    lr_mult: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - optim.lr=0.006
+  - name: lrsw-f-0p5x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: lr
+    lr_mult: 0.5
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.lr=0.0015
+  - name: lrsw-f-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: lr
+    lr_mult: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=6487
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[6487]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.lr=0.006
+  - name: scale-base-1x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: branch
+    branch: 1x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-base-stable-s1
+    after_step: 10520
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=13151
+      - "checkpoint_steps=[13151]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-base-stable-s1/checkpoints/step_00010520.pt"
+      - data.union_order=sets_in_order
+  - name: scale-r1e-1x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: branch
+    branch: 1x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-r1e-stable-s1
+    after_step: 10520
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=13151
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[13151]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-r1e-stable-s1/checkpoints/step_00010520.pt"
+      - data.union_order=sets_in_order
+  - name: scale-f-1x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: branch
+    branch: 1x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-f-stable-s1
+    after_step: 8116
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=10146
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[10146]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-f-stable-s1/checkpoints/step_00008116.pt"
+      - data.union_order=sets_in_order
+  - name: scale-base-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: branch
+    branch: 2x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-base-stable-s1
+    after_step: 21040
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=26301
+      - "checkpoint_steps=[26301]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-base-stable-s1/checkpoints/step_00021040.pt"
+      - data.union_order=sets_in_order
+  - name: scale-r1e-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: branch
+    branch: 2x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-r1e-stable-s1
+    after_step: 21041
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=26302
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[26302]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-r1e-stable-s1/checkpoints/step_00021041.pt"
+      - data.union_order=sets_in_order
+  - name: scale-f-2x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: branch
+    branch: 2x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-f-stable-s1
+    after_step: 16232
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=20291
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[20291]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-f-stable-s1/checkpoints/step_00016232.pt"
+      - data.union_order=sets_in_order
+  - name: scale-base-4x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: branch
+    branch: 4x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-base-stable-s1
+    after_step: 42081
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=52602
+      - "checkpoint_steps=[52602]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-base-stable-s1/checkpoints/step_00042081.pt"
+      - data.union_order=sets_in_order
+  - name: scale-r1e-4x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: branch
+    branch: 4x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-r1e-stable-s1
+    after_step: 42083
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=52604
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[52604]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-r1e-stable-s1/checkpoints/step_00042083.pt"
+      - data.union_order=sets_in_order
+  - name: scale-f-4x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: branch
+    branch: 4x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-f-stable-s1
+    after_step: 32464
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=40581
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[40581]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-f-stable-s1/checkpoints/step_00032464.pt"
+      - data.union_order=sets_in_order
+  - name: scale-base-8x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-base
+    stage: branch
+    branch: 8x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-base-stable-s1
+    after_step: 84163
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=105204
+      - "checkpoint_steps=[105204]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-base-stable-s1/checkpoints/step_00084163.pt"
+      - data.union_order=sets_in_order
+  - name: scale-r1e-8x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-r1e
+    stage: branch
+    branch: 8x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-r1e-stable-s1
+    after_step: 84166
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=105208
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[105208]"
+      - log_stream_rms_every=100
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-r1e-stable-s1/checkpoints/step_00084166.pt"
+      - data.union_order=sets_in_order
+  - name: scale-f-8x-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    arm: abl-f
+    stage: branch
+    branch: 8x
+    shards: ["${DATA_ROOT}/phase0-v2-t64k/train", "${DATA_ROOT}/phase0-v3-t64k/train"]
+    after: scale-f-stable-s1
+    after_step: 64929
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[4]"
+      - steps=81162
+      - model.encoder.attn_res=block_entry
+      - "checkpoint_steps=[81162]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=1512
+      - optim.decay_fraction=0.2
+      - stage=continue
+      - "resume_from=${RUN_ROOT}/scale-f-stable-s1/checkpoints/step_00064929.pt"
+      - data.union_order=sets_in_order

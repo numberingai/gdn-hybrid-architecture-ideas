@@ -1,0 +1,31 @@
+# Runs file ladder-200m-base (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/ladder-200m-base.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: base200-s1
+    config: configs/v2/control-a-200m.yaml
+    seed: 1
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[5,6]"
+      - steps=5597
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.0
+      - "checkpoint_steps=[1000,5597]"
+  - name: base200-s2
+    config: configs/v2/control-a-200m.yaml
+    seed: 2
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[5,6]"
+      - steps=5597
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.0
+      - "checkpoint_steps=[5597]"

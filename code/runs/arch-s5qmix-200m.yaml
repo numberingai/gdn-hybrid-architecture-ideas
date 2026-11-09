@@ -1,0 +1,55 @@
+# Runs file arch-s5qmix-200m (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/arch-s5qmix-200m.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: s5qmix200-s1
+    config: configs/v2/control-a-200m.yaml
+    seed: 1
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[6]"
+      - steps=5597
+      - model.encoder.attn_res=block_entry
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.0
+      - "checkpoint_steps=[5597]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1999,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=2336
+  - name: s5qmix200-s1-c
+    config: configs/v2/control-a-200m.yaml
+    seed: 1
+    shards: "${DATA_ROOT}/phase-c-200m-t64k/train"
+    after: s5qmix200-s1
+    after_step: 5597
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[6]"
+      - steps=7996
+      - model.encoder.attn_res=block_entry
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.2
+      - "checkpoint_steps=[7996]"
+      - log_stream_rms_every=100
+      - model.encoder.gdn_write_mix=layer
+      - optim.zero_gate_decay=none
+      - model.encoder.gdn_write_variant=qmix
+      - optim.mix_query_decay=none_qmix
+      - "tst.schedule=[[0,4],[1999,1]]"
+      - model.tie_embeddings=true
+      - model.ffn_hidden=2336
+      - stage=continue
+      - data_start_step=5597
+      - "resume_from=${RUN_ROOT}/s5qmix200-s1/checkpoints/step_00005597.pt"

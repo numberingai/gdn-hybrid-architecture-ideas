@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ced"
+version = "0.1.0"
+description = "Reference PyTorch implementation of a hybrid Gated DeltaNet + global-attention language model, the code to train it, and its evaluation code"
+authors = [{ name = "Jihoo Lee" }]
+license = "MIT"
+license-files = ["LICENSE", "LICENSES/*.txt"]
+requires-python = ">=3.11"
+dependencies = [
+    "torch>=2.14",
+    "numpy",
+    "pyyaml>=6",
+    "tokenizers",
+]
+
+[project.optional-dependencies]
+gpu = ["triton"]
+eval = ["pyarrow"]
+logging = ["wandb"]
+test = ["pytest>=9"]
+
+[tool.setuptools.packages.find]
+include = ["ced*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+markers = ["slow: takes more than a few seconds"]

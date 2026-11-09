@@ -1,0 +1,41 @@
+# Runs file ladder-200m-c (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/ladder-200m-c.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase-c-200m-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: base200-s1-c
+    config: configs/v2/control-a-200m.yaml
+    seed: 1
+    after: base200-s1
+    after_step: 5597
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[5,6]"
+      - steps=7996
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.2
+      - "checkpoint_steps=[7996]"
+      - stage=continue
+      - data_start_step=5597
+      - "resume_from=${RUN_ROOT}/base200-s1/checkpoints/step_00005597.pt"
+  - name: base200-s2-c
+    config: configs/v2/control-a-200m.yaml
+    seed: 2
+    after: base200-s2
+    after_step: 5597
+    set:
+      - model.encoder.n_layers=28
+      - model.encoder.attention.n_kv_heads=1
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[5,6]"
+      - steps=7996
+      - optim.warmup_steps=800
+      - optim.decay_fraction=0.2
+      - "checkpoint_steps=[7996]"
+      - stage=continue
+      - data_start_step=5597
+      - "resume_from=${RUN_ROOT}/base200-s2/checkpoints/step_00005597.pt"

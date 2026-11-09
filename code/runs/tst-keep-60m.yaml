@@ -1,0 +1,63 @@
+# Runs file tst-keep-60m (public code export): the entries only; paths use ${DATA_ROOT} and ${RUN_ROOT}.
+# python scripts/run_entry.py runs/tst-keep-60m.yaml --list   |   --name <entry> --data-root ... --run-root ... [--dry-run]
+shards: "${DATA_ROOT}/phase0-v2-t64k/train"
+eval_dir: "${DATA_ROOT}/eval/phase0-v2-t64k"
+runs:
+  - name: tstk-base-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,1]]"
+  - name: tstk-reset-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - tst.keep_optimizer_state=false
+  - name: tstk-keep-mxl-a-s1
+    config: configs/v2/control-a-60m.yaml
+    seed: 1
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - tst.keep_optimizer_state=true
+  - name: tstk-base-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,1]]"
+  - name: tstk-reset-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - tst.keep_optimizer_state=false
+  - name: tstk-keep-mxl-a-s2
+    config: configs/v2/control-a-60m.yaml
+    seed: 2
+    set:
+      - model.encoder.attention.temperature=ssmax
+      - model.encoder.attention.rope_max_distance=2048
+      - "model.encoder.nope_global_layers=[3,4]"
+      - steps=6487
+      - "tst.schedule=[[0,4],[1622,1]]"
+      - tst.keep_optimizer_state=true
